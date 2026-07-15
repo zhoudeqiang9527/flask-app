@@ -43,10 +43,10 @@ jobs:
     
     - name: Install OpenShift CLI
       run: |
-        curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.19/openshift-client-linux.tar.gz
-          tar -xzf openshift-client-linux.tar.gz
-          sudo mv oc kubectl /usr/local/bin/
-          oc version
+        curl -sSLO https://github.com/openshift-client/oc/releases/latest/download/oc-linux.tar.gz
+        tar -xzf oc-linux.tar.gz
+        sudo mv oc /usr/local/bin/
+        oc version
     
     - name: Setup kubeconfig and Deploy
       run: |
