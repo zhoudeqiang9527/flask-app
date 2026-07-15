@@ -19,6 +19,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
+    - name: Test GHCR Auth
+      env:
+        GHCR_USER: zhoudeqiang9527
+        GHCR_PWD: ${{ secrets.GHCR_TOKEN }}
+      run: |
+        curl -v -u $GHCR_USER:$GHCR_PWD https://ghcr.io/v2/
+
     - name: Log in to GHCR
       uses: docker/login-action@v3
       with:
