@@ -50,19 +50,27 @@ jobs:
     
     - name: Setup kubeconfig and Deploy
       run: |
+        set -euo pipefail
+
         mkdir -p ~/.kube
         echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
-        
+
         oc project ${{ env.PROJECT }}
-        
-        # 删除旧部署
+
         oc delete all -l app=${{ env.APP_NAME }} -n ${{ env.PROJECT }} 2>/dev/null || true
         sleep 5
-        
-        # 部署新应用
+
         oc new-app --name=${{ env.APP_NAME }} --image=${{ env.REGISTRY }}/${{ github.repository }}/${{ env.IMAGE_NAME }}:latest -n ${{ env.PROJECT }}
         oc expose svc/${{ env.APP_NAME }} -n ${{ env.PROJECT }} || true
-        oc rollout status deployment/${{ env.APP_NAME }} -n ${{ env.PROJECT }} --timeout=90s
+
+        oc get all -n ${{ env.PROJECT }}
+        oc get pods -n ${{ env.PROJECT }} -o wide
+        oc describe deployment/${{ env.APP_NAME }} -n ${{ env.PROJECT }} || true
+        oc describe pods -l app=${{ env.APP_NAME }} -n ${{ env.PROJECT }} || true
+        oc logs -l app=${{ env.APP_NAME }} -n ${{ env.PROJECT }} --all-containers=true --tail=200 || true
+        oc get events -n ${{ env.PROJECT }} --sort-by=.metadata.creationTimestamp | tail -n 30 || true
+
+        oc rollout status deployment/${{ env.APP_NAME }} -n ${{ env.PROJECT }} --timeout=180s
     
     - name: Show Application URL
       run: |
