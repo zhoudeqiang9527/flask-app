@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Container
+*.tar
+*.tar.gz
+
+# Logs
+*.log
+
+# Local environment
+.env
+.env.local
+
+# OpenShift/K8s
+.kube/
+*_kubeconfig*
