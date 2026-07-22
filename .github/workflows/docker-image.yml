@@ -56,3 +56,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Print image tags
+        run: |
+          echo "Image tags:"
+          echo "${{ steps.meta.outputs.tags }}"
